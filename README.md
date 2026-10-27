@@ -11,7 +11,7 @@ Plain HTML/CSS/JS, no build step. Edit the files and push to `main`.
 |---|---|
 | `index.html` | The whole site (hero, about, dates, program, participants, venue, registration, organizers) |
 | `assets/css/style.css` | Styles |
-| `assets/js/config.js` | **The only file you normally need to edit**: registration link, participant sheet |
+| `assets/js/config.js` | **The only file you normally need to edit**: participant sheet settings |
 | `assets/js/participants.js` | Fetches the participant CSV and renders the searchable table |
 | `data/participants.csv` | Sample list used when no Google Sheet is configured (and for local preview) |
 | `.nojekyll` | Tells GitHub Pages to serve files as-is |
@@ -86,10 +86,12 @@ A static site cannot hide anything: any API key placed in JavaScript is visible 
 every visitor. Referrer restrictions reduce the risk but do not remove it. The CSV
 export of a view-only sheet gives the same data with nothing to protect.
 
-## Registration link
+## Registration
 
-Set `registrationUrl` in `assets/js/config.js` to the Google Form URL. Until it is
-set, the button reads "Registration opens soon".
+The Google Form link is **not** published on the site. Participation is by invitation:
+the page asks people to contact the organizer by email, and the organizer sends the
+form link in reply. The contact address is hard-coded in `index.html` (Participation
+and Organizing committee sections).
 
 ## Local preview
 

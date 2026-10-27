@@ -2,9 +2,6 @@
 // Site configuration. Edit this file only; no build step is needed.
 // ---------------------------------------------------------------------------
 window.SITE_CONFIG = {
-  // Registration form (Google Form) shown on the "Register" button.
-  registrationUrl: "",
-
   participants: {
     // Where the participant list comes from.
     //
