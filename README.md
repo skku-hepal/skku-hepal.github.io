@@ -66,8 +66,8 @@ Recommended setup:
    sheetName: "Public",
    ```
 
-The current public sheet is **KJ-HEA 2026 Participant List (Public)** in the organiser's
-Google Drive; its id is already in `config.js`. Its cell `A1` holds the IMPORTRANGE
+The current public sheet is **Korean-Japan High-energy Astrophysics Workshop participant**
+in the organiser's Google Drive; its id is already in `config.js`. Its cell `A1` holds the IMPORTRANGE
 formula above, pointing at the private response sheet
 *Registration form for Korea-Japan High-energy Astrophysics Workshop(응답)*. Only the `Name`, `Institute` and
 `Presentation title` columns are rendered; any other column in the sheet is ignored by
