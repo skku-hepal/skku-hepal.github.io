@@ -55,8 +55,12 @@
     institute: ["institute", "institution", "affiliation"],
     "presentation title": ["presentation title", "talk title", "title", "presentation"],
   };
+  // Exact match first, then a header that starts with the alias, so a Google Form
+  // question like "Presentation Title (leave empty if none)" still matches.
   const headerIndex = (header, key) => {
-    for (const k of (ALIASES[key] || [key])) { const i = header.indexOf(k); if (i >= 0) return i; }
+    const names = ALIASES[key] || [key];
+    for (const k of names) { const i = header.indexOf(k); if (i >= 0) return i; }
+    for (const k of names) { const i = header.findIndex(h => h.startsWith(k)); if (i >= 0) return i; }
     return -1;
   };
 
