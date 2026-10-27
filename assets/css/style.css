@@ -184,3 +184,5 @@ ul.plain li { margin-bottom: 8px; }
 }
 
 .btn.disabled { opacity: .55; cursor: not-allowed; transform: none; }
+.notice { margin-top: 18px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent-2); border-radius: 6px; font-size: .92rem; color: var(--text-muted); }
+.notice strong { color: var(--text); }

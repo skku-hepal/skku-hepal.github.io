@@ -25,8 +25,14 @@ the sheet you point at is public, so **never point it at the raw form-response s
 Recommended setup:
 
 1. Create a Google Form for registration with three questions: **Name**, **Institute**,
-   **Email address**. Link its responses to a spreadsheet (`Form Responses 1`). Keep this
-   spreadsheet private; it is the only place the email addresses live.
+   **Email address**. Put this in the form description so respondents know what is public:
+
+   > Only your name and institute will be shown in the public participant list on the
+   > workshop website. Your email address is kept private and used only by the
+   > organizers to contact you about the workshop.
+
+   Link its responses to a spreadsheet (`Form Responses 1`). Keep this spreadsheet
+   private; it is the only place the email addresses live.
 2. Create a **second** spreadsheet, add a tab named `Public`, and in cell `A1` put
    a formula that pulls only the public columns, for example:
 
