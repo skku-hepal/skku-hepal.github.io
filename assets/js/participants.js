@@ -51,7 +51,10 @@
   const norm = s => String(s || "").trim().toLowerCase();
 
   // Header names that mean the same thing (all lower-case).
-  const ALIASES = { institute: ["institute", "institution", "affiliation"] };
+  const ALIASES = {
+    institute: ["institute", "institution", "affiliation"],
+    "presentation title": ["presentation title", "talk title", "title", "presentation"],
+  };
   const headerIndex = (header, key) => {
     for (const k of (ALIASES[key] || [key])) { const i = header.indexOf(k); if (i >= 0) return i; }
     return -1;

@@ -24,12 +24,24 @@ the sheet you point at is public, so **never point it at the raw form-response s
 
 Recommended setup:
 
-1. Create a Google Form for registration with three questions: **Name**, **Institute**,
-   **Email address**. Put this in the form description so respondents know what is public:
+1. Create a Google Form for registration. Under **Settings → Responses** turn on:
+   - **Collect email addresses → Verified** (respondents must sign in with Google; the
+     address is recorded automatically, so no email question is needed),
+   - **Limit to 1 response**,
+   - **Allow response editing** (the confirmation email gets an "Edit your response"
+     link, so people can fix their institute or add a title later; the edit updates the
+     same row in the response sheet, and the website follows).
 
-   > Only your name and institute will be shown in the public participant list on the
-   > workshop website. Your email address is kept private and used only by the
-   > organizers to contact you about the workshop.
+   If your Google Workspace account offers "Restrict to users in <your organization>",
+   leave it **off**, or Japanese participants cannot sign in.
+
+   Questions: **Name**, **Institute**, **Presentation title** (optional). Put this in the
+   form description so respondents know what is public:
+
+   > Your name, institute and presentation title will be shown in the public participant
+   > list on the workshop website. Your email address is kept private and used only by
+   > the organizers to contact you about the workshop. You can edit your entry later
+   > through the link in your confirmation email.
 
    Link its responses to a spreadsheet (`Form Responses 1`). Keep this spreadsheet
    private; it is the only place the email addresses live.
@@ -37,13 +49,14 @@ Recommended setup:
    a formula that pulls only the public columns, for example:
 
    ```
-   =QUERY(IMPORTRANGE("<RESPONSES_SPREADSHEET_ID>", "Form Responses 1!A:D"),
-          "select Col2, Col3 where Col2 is not null", 1)
+   =QUERY(IMPORTRANGE("<RESPONSES_SPREADSHEET_ID>", "Form Responses 1!A:E"),
+          "select Col3, Col4, Col5 where Col3 is not null", 1)
    ```
 
-   (Column A is the timestamp, B name, C institute, D email; only B and C are pulled.)
-   The header row should read `Name`, `Institute` (`Affiliation` is accepted too).
-   Accept the IMPORTRANGE access prompt once.
+   With verified email collection the response sheet is: A timestamp, B email address,
+   C name, D institute, E presentation title; only C–E are pulled. The header row should
+   read `Name`, `Institute`, `Presentation title` (`Affiliation` and `Talk title` are
+   accepted too). Accept the IMPORTRANGE access prompt once.
 3. Share the second spreadsheet as **Anyone with the link → Viewer**.
 4. Copy its id from the URL (`https://docs.google.com/spreadsheets/d/<ID>/edit`) into
    `assets/js/config.js`:
@@ -54,9 +67,10 @@ Recommended setup:
    ```
 
 The current public sheet is **KJ-HEA 2026 Participants (Public)** in the organiser's Google
-Drive; its id is already in `config.js`. Only the `Name` and `Institute` columns are
-rendered; any other column in the sheet is ignored by the page. If the sheet cannot be read (not shared yet,
-Google outage), the page silently falls back to `data/participants.csv`.
+Drive; its id is already in `config.js`. Only the `Name`, `Institute` and
+`Presentation title` columns are rendered; any other column in the sheet is ignored by
+the page. If the sheet cannot be read (not shared yet, Google outage), the page silently
+falls back to `data/participants.csv`.
 
 That is it. The page requests
 `https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv&sheet=Public`
