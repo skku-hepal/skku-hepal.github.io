@@ -23,7 +23,8 @@ window.SITE_CONFIG = {
 
     // Columns to display, matched case-insensitively against the sheet header.
     // Anything not listed here (Email, Timestamp, ...) is never rendered.
-    columns: ["Name", "Affiliation", "Country", "Talk title"],
+    // "Institute" also matches a column called "Affiliation".
+    columns: ["Name", "Institute"],
 
     // Column used for alphabetical default sort.
     sortBy: "Name",

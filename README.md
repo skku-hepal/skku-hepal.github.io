@@ -24,18 +24,20 @@ the sheet you point at is public, so **never point it at the raw form-response s
 
 Recommended setup:
 
-1. Create a Google Form for registration. Link its responses to a spreadsheet
-   (`Responses` sheet). Keep this spreadsheet private.
+1. Create a Google Form for registration with three questions: **Name**, **Institute**,
+   **Email address**. Link its responses to a spreadsheet (`Form Responses 1`). Keep this
+   spreadsheet private; it is the only place the email addresses live.
 2. Create a **second** spreadsheet, add a tab named `Public`, and in cell `A1` put
    a formula that pulls only the public columns, for example:
 
    ```
-   =QUERY(IMPORTRANGE("<RESPONSES_SPREADSHEET_ID>", "Form Responses 1!A:H"),
-          "select Col2, Col3, Col4, Col6 where Col2 is not null", 1)
+   =QUERY(IMPORTRANGE("<RESPONSES_SPREADSHEET_ID>", "Form Responses 1!A:D"),
+          "select Col2, Col3 where Col2 is not null", 1)
    ```
 
-   Rename the header row to `Name`, `Affiliation`, `Country`, `Talk title`
-   (or adjust `columns` in `config.js`). Accept the IMPORTRANGE access prompt once.
+   (Column A is the timestamp, B name, C institute, D email; only B and C are pulled.)
+   The header row should read `Name`, `Institute` (`Affiliation` is accepted too).
+   Accept the IMPORTRANGE access prompt once.
 3. Share the second spreadsheet as **Anyone with the link → Viewer**.
 4. Copy its id from the URL (`https://docs.google.com/spreadsheets/d/<ID>/edit`) into
    `assets/js/config.js`:
@@ -46,7 +48,8 @@ Recommended setup:
    ```
 
 The current public sheet is **KJ-HEA 2026 Participants (Public)** in the organiser's Google
-Drive; its id is already in `config.js`. If the sheet cannot be read (not shared yet,
+Drive; its id is already in `config.js`. Only the `Name` and `Institute` columns are
+rendered; any other column in the sheet is ignored by the page. If the sheet cannot be read (not shared yet,
 Google outage), the page silently falls back to `data/participants.csv`.
 
 That is it. The page requests

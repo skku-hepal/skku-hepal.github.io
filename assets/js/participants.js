@@ -50,6 +50,13 @@
   // --- Helpers ---------------------------------------------------------------
   const norm = s => String(s || "").trim().toLowerCase();
 
+  // Header names that mean the same thing (all lower-case).
+  const ALIASES = { institute: ["institute", "institution", "affiliation"] };
+  const headerIndex = (header, key) => {
+    for (const k of (ALIASES[key] || [key])) { const i = header.indexOf(k); if (i >= 0) return i; }
+    return -1;
+  };
+
   const FLAGS = {
     korea: "🇰🇷", "south korea": "🇰🇷", "republic of korea": "🇰🇷", kr: "🇰🇷", "한국": "🇰🇷", "대한민국": "🇰🇷",
     japan: "🇯🇵", jp: "🇯🇵", "日本": "🇯🇵", "일본": "🇯🇵",
@@ -134,7 +141,7 @@
 
       const header = rows[0].map(norm);
       const wanted = (cfg.columns && cfg.columns.length ? cfg.columns : rows[0]);
-      columns = wanted.map(label => ({ key: norm(label), label, index: header.indexOf(norm(label)) }))
+      columns = wanted.map(label => ({ key: norm(label), label, index: headerIndex(header, norm(label)) }))
                       .filter(c => c.index >= 0);
       if (!columns.length) throw new Error("None of the configured columns were found in the sheet header: " + rows[0].join(", "));
 
