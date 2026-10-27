@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
     // can view". No API key is needed; the browser downloads the sheet as CSV.
     // Keep the raw form-response sheet PRIVATE and publish a second sheet that
     // only contains public columns (see README.md).
-    sheetId: "1-mcn4A3cWiYuOm4Le8zH7Tbd8nQH09HGSGG643r6Jyg", // the long id in https://docs.google.com/spreadsheets/d/<ID>/edit
+    sheetId: "1jshkC5QSnoDS8iYAAz8Re_D-LI8vsLTpnzqtwhbyGk8", // the long id in https://docs.google.com/spreadsheets/d/<ID>/edit
     sheetName: "",        // tab name inside that spreadsheet; empty = first tab
 
     // Option B: any CSV URL (e.g. a "Publish to web" CSV link). Overrides sheetId.
