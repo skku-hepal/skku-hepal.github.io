@@ -45,6 +45,10 @@ Recommended setup:
    sheetName: "Public",
    ```
 
+The current public sheet is **KJ-HEA 2026 Participants (Public)** in the organiser's Google
+Drive; its id is already in `config.js`. If the sheet cannot be read (not shared yet,
+Google outage), the page silently falls back to `data/participants.csv`.
+
 That is it. The page requests
 `https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv&sheet=Public`
 on every load, so new registrations appear within a minute or so.

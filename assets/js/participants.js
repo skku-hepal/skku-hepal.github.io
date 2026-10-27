@@ -19,8 +19,8 @@
   function sourceUrl() {
     if (cfg.csvUrl) return cfg.csvUrl;
     if (cfg.sheetId) {
-      const sheet = encodeURIComponent(cfg.sheetName || "");
-      return `https://docs.google.com/spreadsheets/d/${cfg.sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${sheet}`;
+      const sheet = cfg.sheetName ? `&sheet=${encodeURIComponent(cfg.sheetName)}` : "";
+      return `https://docs.google.com/spreadsheets/d/${cfg.sheetId}/gviz/tq?tqx=out:csv&headers=1${sheet}`;
     }
     return cfg.fallbackUrl || "";
   }
@@ -107,15 +107,30 @@
   }
 
   // --- Load ------------------------------------------------------------------
+  async function fetchCSV(url) {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const rows = parseCSV(await res.text());
+    if (rows.length < 1) throw new Error("Empty sheet");
+    return rows;
+  }
+
   async function load() {
     const url = sourceUrl();
     if (!url) { setStatus("Participant list is not configured yet.", true); return; }
     setStatus("Loading participant list…");
     try {
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const rows = parseCSV(await res.text());
-      if (rows.length < 1) throw new Error("Empty sheet");
+      let rows, usedFallback = false;
+      try {
+        rows = await fetchCSV(url);
+      } catch (err) {
+        // The Google Sheet is unreachable (not shared yet, offline, ...):
+        // fall back to the static CSV bundled with the site, if any.
+        if (!cfg.fallbackUrl || cfg.fallbackUrl === url) throw err;
+        console.warn("Participant list: primary source failed, using fallback.", err);
+        rows = await fetchCSV(cfg.fallbackUrl);
+        usedFallback = true;
+      }
 
       const header = rows[0].map(norm);
       const wanted = (cfg.columns && cfg.columns.length ? cfg.columns : rows[0]);
@@ -129,7 +144,8 @@
       const sIdx = columns.findIndex(c => c.key === norm(cfg.sortBy));
       sortIdx = sIdx >= 0 ? sIdx : 0;
       render();
-      els.updated.textContent = "Last updated: " + new Date().toLocaleString("en-GB", { timeZone: "Asia/Seoul", dateStyle: "medium", timeStyle: "short" }) + " KST";
+      els.updated.textContent = (usedFallback ? "Showing the last published list. " : "") +
+        "Last updated: " + new Date().toLocaleString("en-GB", { timeZone: "Asia/Seoul", dateStyle: "medium", timeStyle: "short" }) + " KST";
     } catch (err) {
       console.error("Participant list:", err);
       setStatus("Could not load the participant list. Please try again later.", true);
