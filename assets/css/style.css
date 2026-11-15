@@ -123,7 +123,7 @@ p { margin: 0 0 1em; }
 table.program { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
 table.program td { padding: 11px 14px; border-top: 1px solid var(--line); vertical-align: top; }
 table.program tr:first-child td { border-top: 0; }
-table.program td.time { width: 80px; font-variant-numeric: tabular-nums; color: var(--text-muted); font-weight: 500; }
+table.program td.time { width: 110px; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-muted); font-weight: 500; }
 table.program tr.session td { font-weight: 600; }
 table.program tr.session td.time { color: var(--accent); }
 
