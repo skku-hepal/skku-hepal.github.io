@@ -129,6 +129,16 @@
     return rows;
   }
 
+  // Map the configured columns onto the sheet header; throws if none match.
+  function resolveColumns(rows) {
+    const header = rows[0].map(norm);
+    const wanted = (cfg.columns && cfg.columns.length ? cfg.columns : rows[0]);
+    const cols = wanted.map(label => ({ key: norm(label), label, index: headerIndex(header, norm(label)) }))
+                       .filter(c => c.index >= 0);
+    if (!cols.length) throw new Error("None of the configured columns were found in the sheet header: " + rows[0].join(", "));
+    return cols;
+  }
+
   async function load() {
     const url = sourceUrl();
     if (!url) { setStatus("Participant list is not configured yet.", true); return; }
@@ -137,8 +147,10 @@
       let rows, usedFallback = false;
       try {
         rows = await fetchCSV(url);
+        resolveColumns(rows);
       } catch (err) {
-        // The Google Sheet is unreachable (not shared yet, offline, ...):
+        // The Google Sheet is unreachable or broken (not shared yet, offline,
+        // formula error such as #REF! in the header row, ...):
         // fall back to the static CSV bundled with the site, if any.
         if (!cfg.fallbackUrl || cfg.fallbackUrl === url) throw err;
         console.warn("Participant list: primary source failed, using fallback.", err);
@@ -146,11 +158,7 @@
         usedFallback = true;
       }
 
-      const header = rows[0].map(norm);
-      const wanted = (cfg.columns && cfg.columns.length ? cfg.columns : rows[0]);
-      columns = wanted.map(label => ({ key: norm(label), label, index: headerIndex(header, norm(label)) }))
-                      .filter(c => c.index >= 0);
-      if (!columns.length) throw new Error("None of the configured columns were found in the sheet header: " + rows[0].join(", "));
+      columns = resolveColumns(rows);
 
       records = rows.slice(1).map(r => columns.map(c => (r[c.index] || "").trim()))
                     .filter(r => r.some(v => v));
